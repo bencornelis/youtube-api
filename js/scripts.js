@@ -23,7 +23,7 @@ function getNextPage(pageToken) {
 
     var nextPageToken = responseJSON.nextPageToken;
     console.log(nextPageToken);
-    if (i < 100) {getNextPage(nextPageToken)};
+    getNextPage(nextPageToken);
   });
 }
 
@@ -33,8 +33,25 @@ function findViewCount(videoId) {
   })
 }
 
+function viewCount(videoId) {
+  $.getJSON(buildVideoURL(videoId)).then(function(responseJSON) {
+    console.log("Page " + i + " view count: " + responseJSON.items[0].statistics.viewCount);
+  });
+}
+
 $(function() {
   $.getJSON(url).then(function(responseJSON) {
     getNextPage(responseJSON.nextPageToken);
   })
 });
+
+var relatedVidsUrl = "https://www.googleapis.com/youtube/v3/search?maxResults=50&type=video&part=snippet"
+relatedVidsUrl += "&key=" + API_KEY;
+function obscureVideoId(videoId) {
+  var url = relatedVidsUrl + "&relatedToVideoId=" + videoId;
+  var videoViews = {}
+  $.getJSON(url).then(function(responseJSON) {
+    var relatedIds = responseJSON.items.map(function(item) {return item.id.videoId;});
+    getNext
+  });
+}
